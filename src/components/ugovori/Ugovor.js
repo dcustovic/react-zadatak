@@ -6,10 +6,22 @@ function Ugovor({ ugovori }) {
       {ugovori.map((u) => {
         return (
           <div key={u.id}>
-            <div>{u.kupac}</div>
-            <div>{u.broj_ugovora}</div>
-            <div>{u.rok_isporuke}</div>
-            <div>{u.status}</div>
+            <div>
+              <b>Kupac: </b>
+              {u.kupac}
+            </div>
+            <div>
+              <b>Broj ugovora: </b>
+              {u.broj_ugovora}
+            </div>
+            <div>
+              <b>Rok isporuke: </b>
+              {u.rok_isporuke}
+            </div>
+            <div>
+              <b>Status: </b>
+              {u.status}
+            </div>
             <br />
           </div>
         );
