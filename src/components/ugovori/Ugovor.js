@@ -1,9 +1,14 @@
 import React from "react";
 
-function Ugovor({ ugovori }) {
+const Ugovor = ({ ugovori }) => {
   return (
     <>
       {ugovori.map((u) => {
+        const format_rok_isporuke = u.rok_isporuke
+          .split("-")
+          .reverse()
+          .join("-");
+
         return (
           <div key={u.id}>
             <div>
@@ -16,7 +21,7 @@ function Ugovor({ ugovori }) {
             </div>
             <div>
               <b>Rok isporuke: </b>
-              {u.rok_isporuke}
+              {format_rok_isporuke}
             </div>
             <div>
               <b>Status: </b>
@@ -28,6 +33,6 @@ function Ugovor({ ugovori }) {
       })}
     </>
   );
-}
+};
 
 export default Ugovor;
