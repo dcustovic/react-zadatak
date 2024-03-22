@@ -6,8 +6,10 @@ import { StatusType } from "../types.d.ts";
 const Home = () => {
   const [ugovori, setUgovori] = useState([]);
   const [aktivniUgovori, setAktivniUgovori] = useState([]);
+  const [neaktivniUgovori, setNeaktivniUgovori] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("svi");
+  const [kupacFilter, setKupacFilter] = useState("svi");
 
   const getData = async () => {
     setIsLoading(true);
@@ -21,29 +23,73 @@ const Home = () => {
     setIsLoading(false);
   };
 
+  const handleStatusFilter = (event) => {
+    setStatusFilter(event.target.value);
+  };
+
+  const handleKupacFilter = (event) => {
+    setKupacFilter(event.target.value);
+  };
+
+  // Use effect
   useEffect(() => {
     getData();
   }, []);
 
   useEffect(() => {
-    const filteredUgovori = ugovori.filter(
+    const aktivniUgovori = ugovori.filter(
       (u) =>
         u.status === StatusType.KREIRANO || u.status === StatusType.NARUCENO
     );
-    setAktivniUgovori(filteredUgovori);
+    setAktivniUgovori(aktivniUgovori);
+
+    const neaktivniUgovori = ugovori.filter(
+      (u) => u.status === StatusType.ISPORUCENO
+    );
+    setNeaktivniUgovori(neaktivniUgovori);
   }, [ugovori]);
+
+  const uniqueKupci = [...new Set(ugovori.map((u) => u.kupac))];
 
   return (
     <>
-      <button onClick={() => setIsActive(!isActive)}>
-        {isActive ? "Svi ugovori" : "Aktivni ugovori"}
-      </button>
+      <select value={statusFilter} onChange={handleStatusFilter}>
+        <option value="svi">Svi</option>
+        <option value="aktivni">Aktivni</option>
+        <option value="neaktivni">Neaktivni</option>
+      </select>
+
+      <select value={kupacFilter} onChange={handleKupacFilter}>
+        <option value="svi">Svi</option>
+
+        {uniqueKupci.map((kupac) => (
+          <option key={kupac} value={kupac}>
+            {kupac}
+          </option>
+        ))}
+      </select>
 
       {isLoading ? (
         "Loading..."
       ) : (
         <>
-          <ListUgovori ugovori={isActive ? aktivniUgovori : ugovori} />
+          <ListUgovori
+            ugovori={
+              statusFilter === "aktivni"
+                ? aktivniUgovori.filter((u) =>
+                    kupacFilter === "svi" ? true : u.kupac === kupacFilter
+                  )
+                : statusFilter === "neaktivni"
+                ? neaktivniUgovori.filter((u) =>
+                    kupacFilter === "svi" ? true : u.kupac === kupacFilter
+                  )
+                : statusFilter === "svi"
+                ? ugovori.filter((u) =>
+                    kupacFilter === "svi" ? true : u.kupac === kupacFilter
+                  )
+                : []
+            }
+          />
         </>
       )}
     </>

@@ -1,4 +1,5 @@
 import React from "react";
+import { StatusType } from "../../types.d.ts";
 
 const Ugovor = ({ ugovori }) => {
   return (
@@ -10,7 +11,7 @@ const Ugovor = ({ ugovori }) => {
           .join("-");
 
         return (
-          <div key={u.id}>
+          <section key={u.id}>
             <div>
               <b>Kupac: </b>
               {u.kupac}
@@ -25,10 +26,24 @@ const Ugovor = ({ ugovori }) => {
             </div>
             <div>
               <b>Status: </b>
-              {u.status}
+              <span
+                className={`
+             ${
+               u.status === StatusType.KREIRANO
+                 ? "text-green-400"
+                 : u.status === StatusType.NARUCENO
+                 ? "text-yellow-400"
+                 : u.status === StatusType.ISPORUCENO
+                 ? "text-gray-400"
+                 : ""
+             }
+           `}
+              >
+                {u.status}
+              </span>
             </div>
             <br />
-          </div>
+          </section>
         );
       })}
     </>
