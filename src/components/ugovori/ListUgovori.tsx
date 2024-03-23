@@ -1,7 +1,9 @@
 import React from "react";
-import Ugovor from "./Ugovor";
+import Ugovor from "./Ugovor.tsx";
 
-const ListUgovori = ({ ugovori }) => {
+
+
+const ListUgovori = ({ugovori}) => {
   return <Ugovor ugovori={ugovori} />;
 };
 

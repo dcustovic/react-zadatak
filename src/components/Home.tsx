@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ListUgovori from "./ugovori/ListUgovori";
-import { StatusType } from "../types.d.ts";
+import ListUgovori from "./ugovori/ListUgovori.tsx";
+import { StatusType, UgovorType } from "../types.ts";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [ugovori, setUgovori] = useState([]);
-  const [aktivniUgovori, setAktivniUgovori] = useState([]);
-  const [neaktivniUgovori, setNeaktivniUgovori] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("svi");
-  const [kupacFilter, setKupacFilter] = useState("svi");
+  const [ugovori, setUgovori] = useState<UgovorType[]>([]);
+  const [aktivniUgovori, setAktivniUgovori] = useState<UgovorType[]>([]);
+  const [neaktivniUgovori, setNeaktivniUgovori] = useState<UgovorType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [statusFilter, setStatusFilter] = useState<string>("svi");
+  const [kupacFilter, setKupacFilter] = useState<string>("svi");
+
+  const navigate = useNavigate();
 
   const getData = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get("kupoprodajni_ugovori.json");
-      setUgovori(response.data);
+      setUgovori(response.data.ugovori);
     } catch (error) {
       // TODO: error handling
       console.log(error);
@@ -31,7 +34,6 @@ const Home = () => {
     setKupacFilter(event.target.value);
   };
 
-  // Use effect
   useEffect(() => {
     getData();
   }, []);
@@ -49,11 +51,11 @@ const Home = () => {
     setNeaktivniUgovori(neaktivniUgovori);
   }, [ugovori]);
 
-  const uniqueKupci = [...new Set(ugovori.map((u) => u.kupac))];
+  const ugovorId = ugovori.length;
 
   return (
     <>
-      <select value={statusFilter} onChange={handleStatusFilter}>
+      <select value={"statusFilter"} onChange={handleStatusFilter}>
         <option value="svi">Svi</option>
         <option value="aktivni">Aktivni</option>
         <option value="neaktivni">Neaktivni</option>
@@ -62,11 +64,13 @@ const Home = () => {
       <select value={kupacFilter} onChange={handleKupacFilter}>
         <option value="svi">Svi</option>
 
-        {uniqueKupci.map((kupac) => (
-          <option key={kupac} value={kupac}>
-            {kupac}
-          </option>
-        ))}
+        {ugovori.map((u: UgovorType) => {
+          return (
+            <option key={u.id} value={u.kupac}>
+              {u.kupac}
+            </option>
+          );
+        })}
       </select>
 
       {isLoading ? (
@@ -92,6 +96,15 @@ const Home = () => {
           />
         </>
       )}
+
+      <button
+        onClick={() =>
+          navigate("create-ugovor", { state: { ugovorId: ugovorId } })
+        }
+        className="mx-1 px-3 py-2 text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600"
+      >
+        Novi ugovor
+      </button>
     </>
   );
 };

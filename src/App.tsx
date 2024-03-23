@@ -1,7 +1,8 @@
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Article from "./components/Article";
-import Home from "./components/Home";
-import CreateUgovor from "./components/ugovori/CreateUgovor";
+import Home from "./components/Home.tsx";
+import CreateUgovor from "./components/ugovori/CreateUgovor.tsx";
 
 function App() {
   return (

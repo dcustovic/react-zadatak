@@ -1,10 +1,10 @@
 import React from "react";
-import { StatusType } from "../../types.d.ts";
+import { StatusType } from "../../types.ts";
 
 const Ugovor = ({ ugovori }) => {
   return (
     <>
-      {ugovori.map((u) => {
+      {ugovori.map((u, index) => {
         const format_rok_isporuke = u.rok_isporuke
           .split("-")
           .reverse()
