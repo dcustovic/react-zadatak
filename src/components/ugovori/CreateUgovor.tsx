@@ -13,7 +13,8 @@ const CreateUgovor = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const { ugovorId } = location.state;
+  const { ugovor_id } = location.state;
+  const ugovorId = (ugovor_id + 1).toString();
 
   const handleKupacChange = (event) => {
     setKupac(event.target.value);
@@ -31,12 +32,12 @@ const CreateUgovor = () => {
     setRokIsporuke(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const postData = async (event) => {
     event.preventDefault();
 
     try {
-      await axios.post("http://localhost:3300/ugovori", {
-        id: ugovorId + 1,
+      await axios.post("http://localhost:4000/ugovori", {
+        id: ugovorId,
         kupac: kupac,
         broj_ugovora: brojUgovora,
         datum_akontancije: datumAkontacije,
@@ -57,7 +58,7 @@ const CreateUgovor = () => {
 
   return (
     <div className="flex justify-center items-center my-10">
-      <form onSubmit={handleSubmit} className="bg-gray-200 rounded-lg p-8">
+      <form onSubmit={postData} className="bg-gray-200 rounded-lg p-8">
         <div className="mx-1 mb-4 font-semibold text-gray-800">
           <label>
             Kupac:

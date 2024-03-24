@@ -15,11 +15,11 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  const getData = async () => {
+  const getUgovori = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("kupoprodajni_ugovori.json");
-      setUgovori(response.data.ugovori);
+      const response = await axios.get("http://localhost:4000/ugovori");
+      setUgovori(response.data);
     } catch (error) {
       // TODO: error handling
       console.log(error);
@@ -39,7 +39,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getData();
+    getUgovori();
   }, []);
 
   useEffect(() => {
@@ -55,12 +55,14 @@ const Home = () => {
     setNeaktivniUgovori(neaktivniUgovori);
   }, [ugovori]);
 
-  const ugovorId = ugovori.length;
+  const ugovor_last_item = ugovori.length;
 
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col justify-center items-center rounded-lg bg-gray-200 my-10 p-8 max-w-lg w-full">
         <div className="flex justify-center items-center mb-4">
+          {/* Filters */}
+
           <form>
             <label className="mb-2 block text-sm font-medium text-gray-500">
               Po kupcu
@@ -69,7 +71,7 @@ const Home = () => {
             <select
               value={kupacFilter}
               onChange={handleKupacFilter}
-              className="p-1 mr-1.5 text-sm rounded-xl dark:bg-gray-400 dark:text-white"
+              className="p-1 mr-1.5 text-sm rounded-xl dark:bg-gray-500 dark:text-white"
             >
               <option value="svi">Svi</option>
 
@@ -90,7 +92,7 @@ const Home = () => {
             <select
               value={statusFilter}
               onChange={handleStatusFilter}
-              className="p-1 text-sm rounded-xl dark:bg-gray-400 dark:text-white"
+              className="p-1 text-sm rounded-xl dark:bg-gray-500 dark:text-white"
             >
               <option value="svi">Svi</option>
               <option value="aktivni">Aktivni</option>
@@ -98,6 +100,8 @@ const Home = () => {
             </select>
           </form>
         </div>
+
+        {/* Data */}
 
         {isLoading ? (
           <CircularProgress />
@@ -125,7 +129,9 @@ const Home = () => {
 
         <button
           onClick={() =>
-            navigate("create-ugovor", { state: { ugovorId: ugovorId } })
+            navigate("create-ugovor", {
+              state: { ugovor_id: ugovor_last_item },
+            })
           }
           className="mx-1 mt-3 px-3 py-2 text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700"
         >
