@@ -11,30 +11,33 @@ const Ugovor = ({ ugovori }) => {
           .join("-");
 
         return (
-          <section key={u.id}>
-            <div>
-              <b>Kupac: </b>
+          <section
+            key={u.id}
+            className="bg-gray-100 rounded-xl my-5 pt-5 px-16 border-2 border-gray-300 "
+          >
+            <div className="font-normal ">
+              <b className="font-semibold">Kupac: </b>
               {u.kupac}
             </div>
-            <div>
-              <b>Broj ugovora: </b>
+            <div className="font-normal">
+              <b className="font-semibold">Broj ugovora: </b>
               {u.broj_ugovora}
             </div>
-            <div>
-              <b>Rok isporuke: </b>
+            <div className="font-normal">
+              <b className="font-semibold">Rok isporuke: </b>
               {format_rok_isporuke}
             </div>
-            <div>
-              <b>Status: </b>
+            <div className="font-normal">
+              <b className="font-semibold">Status: </b>
               <span
                 className={`
              ${
                u.status === StatusType.KREIRANO
-                 ? "text-green-400"
+                 ? "text-green-500"
                  : u.status === StatusType.NARUCENO
-                 ? "text-yellow-400"
+                 ? "text-yellow-500"
                  : u.status === StatusType.ISPORUCENO
-                 ? "text-gray-400"
+                 ? "text-gray-500"
                  : ""
              }
            `}

@@ -3,6 +3,7 @@ import axios from "axios";
 import ListUgovori from "./ugovori/ListUgovori.tsx";
 import { StatusType, UgovorType } from "../types.ts";
 import { Link, useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 const Home = () => {
   const [ugovori, setUgovori] = useState<UgovorType[]>([]);
@@ -23,7 +24,10 @@ const Home = () => {
       // TODO: error handling
       console.log(error);
     }
-    setIsLoading(false);
+    // Simuliranje dohvat podataka sa "servera"
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 700);
   };
 
   const handleStatusFilter = (event) => {
@@ -54,58 +58,81 @@ const Home = () => {
   const ugovorId = ugovori.length;
 
   return (
-    <>
-      <select value={"statusFilter"} onChange={handleStatusFilter}>
-        <option value="svi">Svi</option>
-        <option value="aktivni">Aktivni</option>
-        <option value="neaktivni">Neaktivni</option>
-      </select>
+    <div className="flex justify-center items-center">
+      <div className="flex flex-col justify-center items-center rounded-lg bg-gray-200 my-10 p-8 max-w-lg w-full">
+        <div className="flex justify-center items-center mb-4">
+          <form>
+            <label className="mb-2 block text-sm font-medium text-gray-500">
+              Po kupcu
+            </label>
 
-      <select value={kupacFilter} onChange={handleKupacFilter}>
-        <option value="svi">Svi</option>
+            <select
+              value={kupacFilter}
+              onChange={handleKupacFilter}
+              className="p-1 mr-1.5 text-sm rounded-xl dark:bg-gray-400 dark:text-white"
+            >
+              <option value="svi">Svi</option>
 
-        {ugovori.map((u: UgovorType) => {
-          return (
-            <option key={u.id} value={u.kupac}>
-              {u.kupac}
-            </option>
-          );
-        })}
-      </select>
+              {ugovori.map((u: UgovorType) => {
+                return (
+                  <option key={u.id} value={u.kupac}>
+                    {u.kupac}
+                  </option>
+                );
+              })}
+            </select>
+          </form>
 
-      {isLoading ? (
-        "Loading..."
-      ) : (
-        <>
-          <ListUgovori
-            ugovori={
-              statusFilter === "aktivni"
-                ? aktivniUgovori.filter((u) =>
-                    kupacFilter === "svi" ? true : u.kupac === kupacFilter
-                  )
-                : statusFilter === "neaktivni"
-                ? neaktivniUgovori.filter((u) =>
-                    kupacFilter === "svi" ? true : u.kupac === kupacFilter
-                  )
-                : statusFilter === "svi"
-                ? ugovori.filter((u) =>
-                    kupacFilter === "svi" ? true : u.kupac === kupacFilter
-                  )
-                : []
-            }
-          />
-        </>
-      )}
+          <form>
+            <label className="mb-2 block text-sm font-medium text-gray-500">
+              Po aktivnosti
+            </label>
+            <select
+              value={statusFilter}
+              onChange={handleStatusFilter}
+              className="p-1 text-sm rounded-xl dark:bg-gray-400 dark:text-white"
+            >
+              <option value="svi">Svi</option>
+              <option value="aktivni">Aktivni</option>
+              <option value="neaktivni">Neaktivni</option>
+            </select>
+          </form>
+        </div>
 
-      <button
-        onClick={() =>
-          navigate("create-ugovor", { state: { ugovorId: ugovorId } })
-        }
-        className="mx-1 px-3 py-2 text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600"
-      >
-        Novi ugovor
-      </button>
-    </>
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <div>
+            <ListUgovori
+              ugovori={
+                statusFilter === "aktivni"
+                  ? aktivniUgovori.filter((u) =>
+                      kupacFilter === "svi" ? true : u.kupac === kupacFilter
+                    )
+                  : statusFilter === "neaktivni"
+                  ? neaktivniUgovori.filter((u) =>
+                      kupacFilter === "svi" ? true : u.kupac === kupacFilter
+                    )
+                  : statusFilter === "svi"
+                  ? ugovori.filter((u) =>
+                      kupacFilter === "svi" ? true : u.kupac === kupacFilter
+                    )
+                  : []
+              }
+            />
+          </div>
+        )}
+
+        <button
+          onClick={() =>
+            navigate("create-ugovor", { state: { ugovorId: ugovorId } })
+          }
+          className="mx-1 mt-3 px-3 py-2 text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700"
+        >
+          Novi ugovor
+        </button>
+      </div>
+    </div>
   );
 };
 
