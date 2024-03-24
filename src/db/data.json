@@ -31,22 +31,6 @@
       "datum_akontacije": "2024-03-14",
       "rok_isporuke": "2024-08-13",
       "status": "KREIRANO"
-    },
-    {
-      "id": "5",
-      "kupac": "pokus",
-      "broj_ugovora": "pokus",
-      "datum_akontancije": "pokus",
-      "rok_isporuke": "pokus",
-      "status": "KREIRANO"
-    },
-    {
-      "id": "6",
-      "kupac": "sda",
-      "broj_ugovora": "sda",
-      "datum_akontancije": "sad",
-      "rok_isporuke": "dsa",
-      "status": "KREIRANO"
     }
   ],
   "artikli": [
