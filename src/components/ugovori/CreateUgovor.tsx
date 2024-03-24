@@ -58,7 +58,10 @@ const CreateUgovor = () => {
 
   return (
     <div className="flex justify-center items-center my-10">
-      <form onSubmit={postData} className="bg-gray-200 rounded-lg p-8">
+      <form
+        onSubmit={postData}
+        className="bg-gray-200 rounded-lg border-2 border-gray-300 p-8"
+      >
         <div className="mx-1 mb-4 font-semibold text-gray-800">
           <label>
             Kupac:
@@ -109,7 +112,7 @@ const CreateUgovor = () => {
 
         <br />
 
-        <div className="flex justify-center">
+        <div className="flex justify-between">
           <button
             type="button"
             onClick={() => navigate(-1)}

@@ -59,7 +59,7 @@ const Home = () => {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col justify-center items-center rounded-lg bg-gray-200 my-10 p-8 max-w-lg w-full">
+      <div className="flex flex-col justify-center items-center rounded-lg bg-gray-200 border-2 border-gray-300 my-10 p-8 max-w-lg w-full">
         <div className="flex justify-center items-center mb-4">
           {/* Filters */}
 

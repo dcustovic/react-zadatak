@@ -5,7 +5,7 @@
       "kupac": "Petra Kranjčar",
       "broj_ugovora": "1/2024",
       "datum_akontacije": "2024-01-04",
-      "rok_isporuke": "2024-04-20",
+      "rok_isporuke": "2024-05-01",
       "status": "KREIRANO"
     },
     {
@@ -30,6 +30,22 @@
       "broj_ugovora": "4/2024",
       "datum_akontacije": "2024-03-14",
       "rok_isporuke": "2024-08-13",
+      "status": "KREIRANO"
+    },
+    {
+      "id": "5",
+      "kupac": "test",
+      "broj_ugovora": "test",
+      "datum_akontancije": "test",
+      "rok_isporuke": "2024-04-15",
+      "status": "KREIRANO"
+    },
+    {
+      "id": "6",
+      "kupac": "testt",
+      "broj_ugovora": "testt",
+      "datum_akontancije": "t",
+      "rok_isporuke": "2024-01-30",
       "status": "KREIRANO"
     }
   ],
