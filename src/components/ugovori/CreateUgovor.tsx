@@ -32,7 +32,6 @@ const CreateUgovor = () => {
 
       navigate("/");
     } catch (error: any) {
-      // TODO: handle errors
       setErrorMessage(error.message);
     }
   };
