@@ -62,7 +62,7 @@ const EditUgovori = ({
       </div>
       <div className="font-normal">
         <span className="font-semibold">Datum akontacije: </span>
-        {ugovor.datum_akontancije}
+        {ugovor.datum_akontacije}
       </div>
 
       {/* Editable rok_isporuke */}

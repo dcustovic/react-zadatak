@@ -25,7 +25,7 @@ const CreateUgovor = () => {
         id: ugovorId,
         kupac: kupac,
         broj_ugovora: brojUgovora,
-        datum_akontancije: datumAkontacije,
+        datum_akontacije: datumAkontacije,
         rok_isporuke: rokIsporuke,
         status: StatusType.KREIRANO,
       });

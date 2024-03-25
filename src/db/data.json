@@ -54,6 +54,27 @@
       "dobavljac": "Bijela tehnika",
       "status": "ISPORUČENO",
       "broj_ugovora": "1/2024"
+    },
+    {
+      "id": "4",
+      "naziv": "Ploča ugradbena kombinirana Gorenje GCE691BSC",
+      "dobavljac": "Bijela tehnika",
+      "status": "KREIRANO",
+      "broj_ugovora": "2/2024"
+    },
+    {
+      "id": "5",
+      "naziv": "Ploča ugradbena kombinirana Gorenje GCE691BSC",
+      "dobavljac": "Bijela tehnika",
+      "status": "NARUČENO",
+      "broj_ugovora": "2/2024"
+    },
+    {
+      "id": "6",
+      "naziv": "Ploča ugradbena kombinirana Gorenje GCE691BSC",
+      "dobavljac": "Bijela tehnika",
+      "status": "ISPORUČENO",
+      "broj_ugovora": "3/2024"
     }
   ]
 }
