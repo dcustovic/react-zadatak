@@ -5,8 +5,10 @@ import { ArtiklType, StatusType, UgovorType } from "../../types.ts";
 import { CircularProgress } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import EditUgovori from "./EditUgovori.tsx";
+import Artikli from "../artikli/Artikli.tsx";
 
-function UgovorDetails() {
+const UgovorDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [ugovor, setUgovor] = useState<UgovorType>();
   const [artikli, setArtikli] = useState<ArtiklType[]>([]);
@@ -14,6 +16,7 @@ function UgovorDetails() {
   const [editRokIsporuke, setEditRokIsporuke] = useState<string>("");
   const [isEditVisible, setIsEditVisible] = useState<boolean>(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -23,9 +26,8 @@ function UgovorDetails() {
       const response = await axios.get(`http://localhost:4000/ugovori/${id}`);
 
       setUgovor(response.data);
-    } catch (error) {
-      // TODO: error handling
-      console.log(error);
+    } catch (error: any) {
+      setErrorMessage(error.message);
     }
 
     // Simuliranje dohvat podataka sa "servera"
@@ -39,9 +41,8 @@ function UgovorDetails() {
     try {
       const response = await axios.get(`http://localhost:4000/artikli`);
       setArtikli(response.data);
-    } catch (error) {
-      // TODO: error handling
-      console.log(error);
+    } catch (error: any) {
+      setErrorMessage(error.message);
     }
 
     // Simuliranje dohvat podataka sa "servera"
@@ -58,7 +59,7 @@ function UgovorDetails() {
   const format_rok_isporuke = ugovor?.rok_isporuke
     .split("-")
     .reverse()
-    .join("-");
+    .join("-") as string;
 
   // Filter artikli u odnosu na broj_ugovora
   const filteredArtikli = artikli.filter((artikal: ArtiklType) => {
@@ -71,9 +72,8 @@ function UgovorDetails() {
     try {
       await axios.delete(`http://localhost:4000/ugovori/${id}`);
       navigate(-1);
-    } catch (error) {
-      // TODO: error handling
-      console.log(error);
+    } catch (error: any) {
+      setErrorMessage(error.message);
     }
   };
 
@@ -81,27 +81,12 @@ function UgovorDetails() {
     setIsEditVisible(!isEditVisible);
   };
 
-  const handleEditUgovora = async () => {
-    try {
-      await axios.put(`http://localhost:4000/ugovori/${id}`, {
-        ...ugovor,
-        rok_isporuke: editRokIsporuke ? editRokIsporuke : format_rok_isporuke,
-        status: selectedStatus ? selectedStatus : ugovor?.status,
-      });
-
-      toggleEdit();
-
-      getUgovor();
-    } catch (error) {
-      // TODO: handle error
-      console.error(error);
-    }
-  };
-
   return (
     <div className="flex justify-center items-center my-10">
       {isLoading ? (
         <CircularProgress />
+      ) : errorMessage !== "" ? (
+        <div className="font-semibold text-lg text-red-500">{errorMessage}</div>
       ) : ugovor ? (
         <div className="bg-gray-200 rounded-xl mb-5 pt-5 px-16 border-2 border-gray-300">
           <div className="mb-4 font-semibold text-lg flex justify-between items-center">
@@ -117,98 +102,37 @@ function UgovorDetails() {
           </div>
 
           {isEditVisible ? (
-            <div>
-              <div className="font-normal ">
-                <b className="font-semibold">Kupac: </b>
-                {ugovor!.kupac}
-              </div>
-              <div className="font-normal">
-                <b className="font-semibold">Broj ugovora: </b>
-                {ugovor!.broj_ugovora}
-              </div>
-              <div className="font-normal">
-                <b className="font-semibold">Datum akontacije: </b>
-                {ugovor!.datum_akontacije}
-              </div>
-
-              {/* Editable rok_isporuke */}
-              <div className="font-normal">
-                <b className="font-semibold">Rok isporuke: </b>
-                {ugovor.status !== StatusType.ISPORUCENO ? (
-                  <input
-                    type="text"
-                    className="p-0.5 mt-1 text-sm rounded-md dark:bg-gray-100 text-gray-500"
-                    value={
-                      editRokIsporuke ? editRokIsporuke : format_rok_isporuke
-                    }
-                    onChange={(e) => setEditRokIsporuke(e.target.value)}
-                  />
-                ) : (
-                  <span className="font-normal">{format_rok_isporuke}</span>
-                )}
-              </div>
-
-              {/* Editable status */}
-              <div className="font-normal">
-                <b className="font-semibold">Status: </b>
-                <select
-                  value={selectedStatus ? selectedStatus : ugovor.status}
-                  className="p-0.5 mt-1 text-sm rounded-md dark:bg-gray-100 text-gray-500"
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                >
-                  {ugovor.status === StatusType.KREIRANO && (
-                    <>
-                      <option value={StatusType.KREIRANO}>KREIRANO</option>
-                      <option value={StatusType.NARUCENO}>NARUCENO</option>
-                    </>
-                  )}
-                  {ugovor.status === StatusType.NARUCENO && (
-                    <>
-                      <option value={StatusType.NARUCENO}>NARUCENO</option>
-                      <option value={StatusType.ISPORUCENO}>ISPORUCENO</option>
-                    </>
-                  )}
-                  {ugovor.status === StatusType.ISPORUCENO && (
-                    <option value={StatusType.ISPORUCENO}>ISPORUCENO</option>
-                  )}
-                </select>
-              </div>
-
-              <div>
-                <button
-                  onClick={handleEditUgovora}
-                  className="mt-3 mr-2 mb-7 px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700"
-                >
-                  Ažuriraj
-                </button>
-                <button
-                  onClick={toggleEdit}
-                  className="mr-2 px-3 py-2 text-sm font-medium rounded-md text-gray-500 hover:bg-gray-300 outline outline-1"
-                >
-                  Poništi
-                </button>
-              </div>
-            </div>
+            <EditUgovori
+              ugovor={ugovor}
+              editRokIsporuke={editRokIsporuke}
+              setEditRokIsporuke={setEditRokIsporuke}
+              format_rok_isporuke={format_rok_isporuke}
+              selectedStatus={selectedStatus}
+              setSelectedStatus={setSelectedStatus}
+              isEditVisible={isEditVisible}
+              setIsEditVisible={setIsEditVisible}
+              id={id as string}
+            />
           ) : (
             <>
               <div className="font-normal ">
-                <b className="font-semibold">Kupac: </b>
+                <span className="font-semibold">Kupac: </span>
                 {ugovor.kupac}
               </div>
               <div className="font-normal">
-                <b className="font-semibold">Broj ugovora: </b>
+                <span className="font-semibold">Broj ugovora: </span>
                 {ugovor.broj_ugovora}
               </div>
               <div className="font-normal">
-                <b className="font-semibold">Datum akontacije: </b>
-                {ugovor.datum_akontacije}
+                <span className="font-semibold">Datum akontacije: </span>
+                {ugovor.datum_akontancije}
               </div>
               <div className="font-normal">
-                <b className="font-semibold">Rok isporuke: </b>
+                <span className="font-semibold">Rok isporuke: </span>
                 {format_rok_isporuke}
               </div>
               <div className="font-normal">
-                <b className="font-semibold">Status: </b>
+                <span className="font-semibold">Status: </span>
                 <span
                   className={`
              ${
@@ -229,51 +153,8 @@ function UgovorDetails() {
             </>
           )}
 
-          <section>
-            {filteredArtikli.map((artikal: ArtiklType) => {
-              return (
-                <section
-                  key={artikal.id}
-                  className="bg-gray-100 rounded-xl py-5 px-16 mb-5 border-2 border-gray-300 hover:border-blue-400 "
-                >
-                  <div className="mb-4 font-semibold text-lg">
-                    Detalji artikla
-                  </div>
-                  <div className="font-normal ">
-                    <b className="font-semibold">Naziv: </b>
-                    {artikal.naziv}
-                  </div>
-                  <div className="font-normal">
-                    <b className="font-semibold">Dobavljac: </b>
-                    {artikal.dobavljac}
-                  </div>
-                  <div className="font-normal">
-                    <b className="font-semibold">Broj ugovora: </b>
-                    {artikal.broj_ugovora}
-                  </div>
+          <Artikli filteredArtikli={filteredArtikli} />
 
-                  <div className="font-normal">
-                    <b className="font-semibold">Status: </b>
-                    <span
-                      className={`
-                        ${
-                          artikal.status === StatusType.KREIRANO
-                            ? "text-green-500"
-                            : artikal.status === StatusType.NARUCENO
-                            ? "text-yellow-500"
-                            : artikal.status === StatusType.ISPORUCENO
-                            ? "text-gray-500"
-                            : ""
-                        }
-                    `}
-                    >
-                      {artikal.status}
-                    </span>
-                  </div>
-                </section>
-              );
-            })}
-          </section>
           <button
             type="button"
             onClick={() => navigate(-1)}
@@ -287,6 +168,6 @@ function UgovorDetails() {
       )}
     </div>
   );
-}
+};
 
 export default UgovorDetails;

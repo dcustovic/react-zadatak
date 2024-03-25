@@ -12,6 +12,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<string>("svi");
   const [kupacFilter, setKupacFilter] = useState<string>("svi");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -20,22 +21,13 @@ const Home = () => {
     try {
       const response = await axios.get("http://localhost:4000/ugovori");
       setUgovori(response.data);
-    } catch (error) {
-      // TODO: error handling
-      console.log(error);
+    } catch (error: any) {
+      setErrorMessage(error.message);
     }
     // Simuliranje dohvat podataka sa "servera"
     setTimeout(() => {
       setIsLoading(false);
     }, 700);
-  };
-
-  const handleStatusFilter = (event) => {
-    setStatusFilter(event.target.value);
-  };
-
-  const handleKupacFilter = (event) => {
-    setKupacFilter(event.target.value);
   };
 
   useEffect(() => {
@@ -70,7 +62,9 @@ const Home = () => {
 
             <select
               value={kupacFilter}
-              onChange={handleKupacFilter}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setKupacFilter(e.target.value)
+              }
               className="p-1 mr-1.5 text-sm rounded-xl dark:bg-gray-500 dark:text-white"
             >
               <option value="svi">Svi</option>
@@ -91,7 +85,9 @@ const Home = () => {
             </label>
             <select
               value={statusFilter}
-              onChange={handleStatusFilter}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setStatusFilter(e.target.value)
+              }
               className="p-1 text-sm rounded-xl dark:bg-gray-500 dark:text-white"
             >
               <option value="svi">Svi</option>
@@ -105,6 +101,10 @@ const Home = () => {
 
         {isLoading ? (
           <CircularProgress />
+        ) : errorMessage !== "" ? (
+          <div className="font-semibold text-lg text-red-500">
+            {errorMessage}
+          </div>
         ) : (
           <div>
             <ListUgovori

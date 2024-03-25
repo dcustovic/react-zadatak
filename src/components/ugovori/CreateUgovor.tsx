@@ -9,6 +9,7 @@ const CreateUgovor = () => {
   const [brojUgovora, setBrojUgovora] = useState<string>("");
   const [datumAkontacije, setDatumAkontacije] = useState<string>("");
   const [rokIsporuke, setRokIsporuke] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -16,23 +17,7 @@ const CreateUgovor = () => {
   const { ugovor_id } = location.state;
   const ugovorId = (ugovor_id + 1).toString();
 
-  const handleKupacChange = (event) => {
-    setKupac(event.target.value);
-  };
-
-  const handleBrojUgovoraChange = (event) => {
-    setBrojUgovora(event.target.value);
-  };
-
-  const handleDatumAkontacijeChange = (event) => {
-    setDatumAkontacije(event.target.value);
-  };
-
-  const handleRokIsporukeChange = (event) => {
-    setRokIsporuke(event.target.value);
-  };
-
-  const postData = async (event) => {
+  const postData = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
@@ -45,18 +30,16 @@ const CreateUgovor = () => {
         status: StatusType.KREIRANO,
       });
 
-      setKupac("");
-      setBrojUgovora("");
-      setDatumAkontacije("");
-      setRokIsporuke("");
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       // TODO: handle errors
-      console.error("Error creating kupac:", error);
+      setErrorMessage(error.message);
     }
   };
 
-  return (
+  return errorMessage !== "" ? (
+    <div className="font-semibold text-lg text-red-500">{errorMessage}</div>
+  ) : (
     <div className="flex justify-center items-center my-10">
       <form
         onSubmit={postData}
@@ -67,7 +50,9 @@ const CreateUgovor = () => {
             Kupac:
             <input
               type="text"
-              onChange={handleKupacChange}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setKupac(e.target.value)
+              }
               className=" w-full p-2 mt-1 text-sm rounded-xl dark:bg-gray-100 text-gray-500"
               required
             />
@@ -79,7 +64,9 @@ const CreateUgovor = () => {
             Broj ugovora:
             <input
               type="text"
-              onChange={handleBrojUgovoraChange}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setBrojUgovora(e.target.value)
+              }
               className="w-full p-2 mt-1 text-sm rounded-xl dark:bg-gray-100 text-gray-500"
               required
             />
@@ -91,7 +78,9 @@ const CreateUgovor = () => {
             Datum akontacije:
             <input
               type="text"
-              onChange={handleDatumAkontacijeChange}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setDatumAkontacije(e.target.value)
+              }
               className="w-full p-2 mt-1 text-sm rounded-xl dark:bg-gray-100 text-gray-500"
               required
             />
@@ -103,7 +92,9 @@ const CreateUgovor = () => {
             Rok isporuke:
             <input
               type="text"
-              onChange={handleRokIsporukeChange}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setRokIsporuke(e.target.value)
+              }
               className="w-full p-2 mt-1 text-sm rounded-xl dark:bg-gray-100 text-gray-500"
               required
             />
