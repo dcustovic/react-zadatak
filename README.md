@@ -1,4 +1,4 @@
-## Upute za pokretanje aplikacije
+## Upute za pokretanje aplikacije:
 
 
 ### Pokretanje servera:
