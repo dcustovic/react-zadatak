@@ -1,9 +1,9 @@
-# Upute za pokretanje aplikacije
+## Upute za pokretanje aplikacije
 
 
-## Pokretanje servera:
+### Pokretanje servera:
 npm run pre-start
 
-## Pokretanje fronte:
+### Pokretanje fronte:
 npm run start
 
